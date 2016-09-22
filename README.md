@@ -28,7 +28,7 @@ This version reads:
 ### Requirement :
 - Scilab (tested on 5.5.2)
 
-IMPORTANT: Before running the software, increase the Java Heap Memory :
+**IMPORTANT:** Before running the software, increase the Java Heap Memory :
 Edit -> Preferences -> Java Heap Memory from 256 to 1024 (or more)
 
 ### Launch :
@@ -55,6 +55,19 @@ Run Lille 30 of March 2014 assuming a Lidar Ratio of 50 sr, creates figures
 ```
 scilab -nb -nw -nouserstartup -f ./BASIC.sce -args Lille 14 03 30 sa_50 fig
 ```
+
+Several figures are created including:
+
+![Attenuated Backscatter Profiles](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/QL-Lille-140330.png "Attenuated Backscatter Profiles")
+Attenuated Backscatter Profiles - Lille 30/03/2014.
+
+
+![Layers](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/LAY-Lille-140330.png "Clouds and Aerosol Layers")
+Clouds and Aerosol Layers - Lille 30/03/2014.  
+Note: better clouds detection is found when PR2 are used as input for Lidar file instead of ln(PR2)
+
+![Iversion](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/EXTSA-Lille-140330.png "Extinction profiles and Lidar Ratio")
+Extinction profiles, AOD and Lidar Ratio - Lille 30/03/2014.
 
 ## Parameters file description
 
