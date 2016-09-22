@@ -1,0 +1,36 @@
+#SITE PARAMETERS
+lid_Site	Lille
+lid_file	mmdd.txt
+lid_data	#
+aer_Site	Lille
+lambda	532
+#EXTRAPOLATION
+zmin	300
+type	cst	lin/cst
+#SPECTRAL FILTERING
+width	0.5
+#LAYERS
+width	210
+thr_cloud	-10
+zmin_bl	530
+zmax_bl	3000
+zmax_tl	5000
+#CLOUDING
+nproc	1
+thr1	10
+thr2	4
+#REF ALTITUDE
+Z1	7000
+Z2	8000
+#INVERSION
+ntime	10
+beta_a(zref)	5E-8
+theta	00
+#DISPLAY
+min_pr2	0
+max_pr2	Auto
+min_ext	Auto
+max_ext	Auto
+min_aod	0
+max_aod	0.5
+
