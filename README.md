@@ -67,9 +67,9 @@ Attenuated Backscatter Profiles - Lille 30/03/2014.
 Clouds and Aerosol Layers - Lille 30/03/2014.  
 Note: better clouds detection is found when PR2 are used as input for Lidar file instead of ln(PR2)
 
-![Slope Index](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/SI-Lille-140330.bmp "Slope Index")
+![Slope Index](https://github.com/AugustinMortier/BASIC/fig/Lille/1403/30/aod/SI-Lille-140330.bmp "Slope Index")
 Slope Index - Lille 30/03/2014.  
-This parameter shows how the Lidar signal fits with a theoritical molecular signal at high altitude. The best quality index is 1. Profiles associated with SI>0.5 and SI<1.5 reveal a poor agreement with the molecular slope and might reveal a low signal, or the presence of residual aerosols/clouds at the reference point (found between Zref_min and Zref_max) 
+This parameter shows how the Lidar signal fits with a theoritical molecular signal at high altitude. The best quality index is 1. Profiles associated with SI>0.5 and SI<1.5 reveal a poor agreement with the molecular slope and might reveal a low signal, or the presence of residual aerosols/clouds at the reference point (found between Z1 and Z2). 
 
 ![Iversion](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/EXTSA-Lille-140330.bmp "Extinction profiles and Lidar Ratio")
 Extinction profiles, AOD and Lidar Ratio - Lille 30/03/2014.
