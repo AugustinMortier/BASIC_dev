@@ -10,10 +10,10 @@ try
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 //              Parameters File Reading            
 // - - - - - - - - - - - - - - - - - - - - - - - - 
-[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod]=param_read(site);
+[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,nprol,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod]=param_read(site);
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 // - - - - - - - - - - - - - - - - - - - - - - - - 
-params=struct("lid_site",lid_site,"lid_file",lid_file,"lid_data",lid_data,"aer_site",aer_site,"lambda",lambda,"zmin",zmin,"extrap_typ",extrap_typ,"width_f",width_f,"width_wave",width_wave,"thr_cloud",thr_cloud,"zmin_bl",zmin_bl,"zmax_bl",zmax_bl,"zmax_tl",zmax_tl,"nproc",nproc,"thr1",thr1,"thr2",thr2,"z1",z1,"z2",z2,"ntime",ntime,"beta_a_zref",beta_a_zref,"theta",theta,"min_pr2",min_pr2,"max_pr2",max_pr2,"min_ext",min_ext,"max_ext",max_ext,"min_aod",min_aod,"max_aod",max_aod)
+params=struct("lid_site",lid_site,"lid_file",lid_file,"lid_data",lid_data,"aer_site",aer_site,"lambda",lambda,"zmin",zmin,"extrap_typ",extrap_typ,"width_f",width_f,"nprol",nprol,"width_wave",width_wave,"thr_cloud",thr_cloud,"zmin_bl",zmin_bl,"zmax_bl",zmax_bl,"zmax_tl",zmax_tl,"nproc",nproc,"thr1",thr1,"thr2",thr2,"z1",z1,"z2",z2,"ntime",ntime,"beta_a_zref",beta_a_zref,"theta",theta,"min_pr2",min_pr2,"max_pr2",max_pr2,"min_ext",min_ext,"max_ext",max_ext,"min_aod",min_aod,"max_aod",max_aod)
 //aug_params = params
 //save('aug_params.sod', aug_params)
 //clear aug_params

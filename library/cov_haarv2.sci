@@ -1,11 +1,11 @@
-function[bl,tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,PR2,lid_z,base_cld)
+function[bl,tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,PR2,lid_z,base_cld,nprol)
 //calculate height of boundary layer and top layer width a constant width wavelet
 //
 //Input
 //a : width of wavelet : 210/15
 //thr_cloud : threshold on convolution between RCS and wavelet to detect clouds : -10
 //zmax_tl : maximum altitude for top layer
-
+//MaJ: 21/12/2015 : add nprol: average on nprol before processing
 
 //Precaution car divise ensuite par PR2
 PR2((PR2)==0)=1E-8;
@@ -14,7 +14,7 @@ PR2((PR2)==0)=1E-8;
 zmax_blrec=zmax_bl;
 zmax_tlrec=zmax_tl;
 
-
+vec=[1:size(PR2,2)];
 
 // - - - wavelet - - - 
 vresol=lid_z(2)-lid_z(1);
@@ -26,12 +26,15 @@ h(a/2+1:a)=1;
 
 bl=ones(1,size(PR2,2))*%nan;
 tl=ones(1,size(PR2,2))*%nan;
+
 for i=1:size(PR2,2)
     //réinitialisation des altitudes max
     zmax_tl=zmax_tlrec;
     zmax_bl=zmax_blrec;
     
-    pr2=PR2(:,i);
+    ind=[vec(i)-nprol/2:vec(i)+nprol/2];
+    indok=ind((ind)>0 & (ind)<=length(vec));
+    pr2=mean(PR2(:,indok),'c');
     
     //on normalise au max en dessous 2000m
     [err,i2000]=min(abs(2000-lid_z));

@@ -2,7 +2,7 @@ function[qualindex]=qualislope(pr2,pr2_mol,z,z1,z2)
 //check quality of rcs slope % molecular slope around reference altitude
     
     //parameters
-    step=125;//step for calculation of slope
+    step=1500/(z(2)-z(1));//step for calculation of slope
     
     //initialization
     qualindex=zeros(size(pr2,2),1);

@@ -77,13 +77,15 @@ Extinction profiles, AOD and Lidar Ratio - Lille 30/03/2014.
 lid_Site : name of the Lidar Site
 lid_file=LOA_CE370_L1B-PR2_yyyy-mm-ddT00-00-00_1440_V1-00.nc : name of Lidar file
 lid_data=rcs_532_nop_ph_l0_t0 : name of RCS field (NetCDF)
+aer_Site : name of the co-located AERONET station
 lambda=532 : Wavelength (nm)
 #EXTRAPOLATION
 zmin=300 : minimal altitude (m) below the extrapolation is done
 type=cst : extrapolation method: constante (cst) or linear (lin)
 #SPECTRAL FILTERING
-width_f=0.5 : spectral filtering width (0 : no filtering - 1 : maximum filtering)
+width=0.5 : spectral filtering width (0 : no filtering - 1 : maximum filtering)
 #LAYERS
+nprol : number of profiles averaged in time for PBL and TL layers detections
 width_wave=210 : wavelet width (m)
 thr_cloud=-10 : threshold on convolution between RCS and wavelet for rough clouds detection
 zmin_bl=330 : minimal altitude of boundary layer (m)
@@ -97,8 +99,8 @@ thr2=4 : second threshold for clouds detection (RCS(icloud)max / RCS(icloud)top 
 Z1=4000 : minimal altitude (m) for reference altitude
 Z2=6000 : maximal altitude (m) for reference altitude
 #INVERSION
-ntime=10 : time average for inversion (min)
-beta_a_zref=5E-8 : aerosol backscattering at reference altitude (1/m.1/sr)
+ntime=20 : time average for inversion (min)
+beta_a_href=5E-8 : aerosol backscattering at reference altitude (1/m.1/sr)
 theta : angle of Lidar (0 : vertical)
 #DISPLAY : Impose boundaries for color scale pictures or let the algorithm calculate it
 min_pr2 Auto / float

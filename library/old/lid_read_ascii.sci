@@ -52,8 +52,8 @@ j=1;
 //        mprintf('%s\n','read pr2 and not ln(pr2) !')
 for i=1:size(all_time,1)
     if all_time(i)==prev_time then
-//        pr2(all_z(i)/vresol+1,j)=exp(all_pr2(i));
-        pr2(all_z(i)/vresol+1,j)=all_pr2(i);
+        pr2(all_z(i)/vresol+1,j)=exp(all_pr2(i));
+//        pr2(all_z(i)/vresol+1,j)=all_pr2(i);
     else
         prev_time=all_time(i);
         j=j+1;

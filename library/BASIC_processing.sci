@@ -23,6 +23,7 @@ lambda=params.lambda;
 width_f=params.width_f;
 extrap_typ=params.extrap_typ;
 zmin=params.zmin;
+nprol=params.nprol;
 width_wave=params.width_wave;
 thr_cloud=params.thr_cloud;
 zmin_bl=params.zmin_bl;
@@ -41,25 +42,6 @@ aod=aer.aod;
 aod_time=aer.time;
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 
-
-
-
-//mprintf('%s\t','Saturation Patch')
-//try
-//// - - - - - - - - - - - - - - - - - - - - - - - - 
-////           Jenoptik Saturation Patch             
-//// - - - - - - - - - - - - - - - - - - - - - - - - 
-//patch_zmax=4000;patch_thr=1e7;
-//pr2_sat=saturation(z,pr2,patch_zmax,zmin_bl,patch_thr);
-//pr2=pr2_sat;
-//// - - - - - - - - - - - - - - - - - - - - - - - - 
-//// - - - - - - - - - - - - - - - - - - - - - - - - 
-//mprintf('%s\n','√')
-//catch
-//mprintf('%s\n','X')
-//abort
-//end
-//
 
 
 mprintf('%s\t','Molecular simulation')
@@ -164,7 +146,9 @@ pr2=pr2(1:imax,:);z=z(1:imax);
 
 //exec(strcat([path_fonctions,'clouderive.sci']));
 pastime=nproc;
-vec=[1+pastime/2:size(pr2,2)-pastime/2];
+//vec=[1+pastime/2:size(pr2,2)-pastime/2];
+vec=[1:size(pr2,2)];
+
 k=0;
 BASE=%nan*ones(10,length(lid_time));PEAK=BASE;TOP=BASE;
 BASE2=%nan*ones(10,length(lid_time));PEAK2=BASE2;TOP2=BASE2;
@@ -172,7 +156,10 @@ BASE2=%nan*ones(10,length(lid_time));PEAK2=BASE2;TOP2=BASE2;
 
 for i=vec
 //    printf('%i\n',i)
-    pr2_avg=mean(pr2(:,i-pastime/2:i+pastime/2),'c');
+    //pr2_avg=mean(pr2(:,i-pastime/2:i+pastime/2),'c');
+    ind=[vec(i)-nprol/2:vec(i)+nprol/2];
+    indok=ind((ind)>0 & (ind)<=length(vec));
+    pr2_avg=mean(pr2(:,indok),'c');
     [base,peak,top,base2,peak2,top2]=clouderive(z,zmin,pr2_avg,thr1,thr2);
     BASE(1:length(base),i)=base';
     PEAK(1:length(base),i)=peak';
@@ -214,11 +201,17 @@ try
 //               Altitude Layers                  
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 //if clouds detected, zmax_bl/tl < base(cloud)
-[i_bl,i_tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,pr2,z,BASE2(1,:));
+[i_bl,i_tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,pr2,z,BASE2(1,:),nprol);
 //indice to altitude
 bl=%nan*ones(i_bl);tl=bl;
+i_bl((i_bl<=1))=1;i_tl((i_tl<=1))=1;
 bl(i_bl>0)=z(i_bl(i_bl>0));
 tl(isnan(i_tl)==%F)=z(i_tl(isnan(i_tl)==%F));
+//flag
+bl((bl<=zmin_bl))=%nan;
+bl((bl>=zmax_bl))=%nan;
+tl((tl>=zmax_tl))=%nan;
+//
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 mprintf('%s\n','√')
@@ -283,20 +276,20 @@ for i=1:length(aod)
         // KLETT Inversion
         // - - - - - - - - - - - - - - - - - - - - - - - - 
         if inv_mod=="aod" then
-            zmin_inv=z(1);//not used
-            [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta);
+            [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin,beta_a_zref,vresol,theta,extrap_typ);
         end
         if inv_mod=="sa" then
-            zmin_inv=z(1);//not used
-            [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,sa_apriori);
+            [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin,beta_a_zref,vresol,theta,sa_apriori,extrap_typ);
         end
         
         
         beta_a(length(beta_a):z2/vresol)=0;
         BETA_A=[BETA_A,real(beta_a)];
         SA=[SA,sa];
+
         //
         // - - - - - - - - - - - - - - - - - - - - - - - - 
+
         
     else
         nb_ok=[nb_ok,0];

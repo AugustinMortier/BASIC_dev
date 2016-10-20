@@ -1,4 +1,4 @@
-function [beta_aer,Saer_OK,AOD,err_AOD] = Inv_Klett_sa(X,beta_mol,AOD_photo,altitude_max,altitude_min,Beta_a_init,resol,theta,Sa)
+function [beta_aer,Saer_OK,AOD,err_AOD] = Inv_Klett_sa(X,beta_mol,AOD_photo,altitude_max,altitude_min,Beta_a_init,resol,theta,Sa,extrap_typ)
 
 //Klett Inversion Constrained by SA
 
@@ -42,8 +42,10 @@ resol=resol*cos(theta*%pi/360)
 
 
         beta_aer=BETA-beta_mol(1:Nref)'
+        if extrap_typ=='cst' then
+            beta_aer(1:altitude_min/resol)=beta_aer(1+altitude_min/resol)*ones(beta_aer(1:altitude_min/resol));
+        end
         sigma_aer=Saer_OK*beta_aer
-        beta_aer=BETA(1:Nref)-beta_mol(1:Nref)'
         beta_aer=beta_aer'
         
         //Calcul de l'AOD du profil

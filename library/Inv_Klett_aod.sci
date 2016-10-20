@@ -1,4 +1,4 @@
-function [beta_aer,Saer_OK,AOD,err_AOD] = Inv_Klett_aod(X,beta_mol,AOD_photo,altitude_max,altitude_min,Beta_a_init,resol,theta)
+function [beta_aer,Saer_OK,AOD,err_AOD] = Inv_Klett_aod(X,beta_mol,AOD_photo,altitude_max,altitude_min,Beta_a_init,resol,theta,extrap_typ)
 
 //Klett Inversion Constrained by AOD
 
@@ -43,6 +43,9 @@ while abs(Sa_max-Sa_min)>0.1
         end
         
         beta_aer=BETA-beta_mol(1:Nref)'
+        if extrap_typ=='cst' then
+            beta_aer(1:altitude_min/resol)=beta_aer(1+altitude_min/resol)*ones(beta_aer(1:altitude_min/resol));
+        end
         sigma_aer=Sa*beta_aer
         beta_aer=real(beta_aer);
         sigma_aer=real(sigma_aer)
@@ -100,8 +103,10 @@ end
 
 
         beta_aer=BETA-beta_mol(1:Nref)'
+        if extrap_typ=='cst' then
+            beta_aer(1:altitude_min/resol)=beta_aer(1+altitude_min/resol)*ones(beta_aer(1:altitude_min/resol));
+        end
         sigma_aer=Saer_OK*beta_aer
-        beta_aer=BETA(1:Nref)-beta_mol(1:Nref)'
         beta_aer=beta_aer'
 
 endfunction

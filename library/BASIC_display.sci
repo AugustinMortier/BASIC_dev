@@ -20,9 +20,11 @@ f.children(1).font_size=3;
 f.children(1).x_label.font_size=4;
 f.children(1).y_label.font_size=4;
 f.children(1).title.font_size=4;
+f.figure_size=[1000,500];
 a=sda()
 a.grid=[-1,-1];a.font_size=3;a.title.font_size=4;
 a.font_color=-1;a.foreground=-1;a.hidden_axis_color=-1;
+a.margins=[0.1,0.1,0.1,0.1];
 a.tight_limits="on";
 // * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -32,10 +34,10 @@ a.tight_limits="on";
 //* * * * * * * * * * * * * * * * * * * * * * * * *
 //                   QUICK LOOK                     
 //* * * * * * * * * * * * * * * * * * * * * * * * *
-mean_lidpr2=nanmean(lid.pr2(1:100,:));
-////power=log10(round(mean_lidpr2));
+mean_lidpr2=nanmean(lid.pr2(LAY.nbcld==0));
+//power=log10(round(mean_lidpr2));
 power=real(log10(mean_lidpr2));
-lid.pr2=100*lid.pr2*(10^(-ceil(power)));
+lid.pr2=100*lid.pr2/(10^(ceil(power)));
 
 
 //min-max
@@ -49,10 +51,10 @@ if isnum(params.max_pr2) then
     Max_PR2=evstr(params.max_pr2);
 else
     //calcul du maximum pour QL
-    Max_PR2=round(1.5*nanmean(lid.pr2(1:100,LAY.nbcld==0)));
+    Maxarea=lid.pr2(1:100,LAY.nbcld==0);
+    Max_PR2=round(1.5*nanmean(Maxarea((Maxarea)>0)));
     Max_PR2=ceil(Max_PR2/10)*10;
 end
-
 
 fig=1;nb_sub=1;
 f_QLb(lid.time,lid.z(1:$)*1E-3,lid.pr2(1:$,:),fig,Min_PR2,Max_PR2,nb_sub);
@@ -125,9 +127,9 @@ scf(fig);clf(fig);
 drawlater()
 f=gcf();a=gca();
 xtitle('','$Time\ (UT)$','$Slope\ Index$')
-f.figure_size=[900,450];
+f.figure_size=[900,400];
 a.x_label.font_size=4;a.y_label.font_size=4;
-a.margins=[0.085,0.15,0.05,0.20];
+a.margins=[0.085,0.15,0.05,0.15];
 //a.box='on';
 
 plot(LAY.time,LAY.si)
@@ -178,8 +180,8 @@ drawnow()
 scf(2);clf(2);f=gcf();
 drawlater()
 a=gca();
-a.margins=[0.085,0.15,0.05,0.20];
-f.figure_size = [900,450];
+a.margins=[0.085,0.15,0.05,0.15];
+f.figure_size = [900,400];
 f.color_map=jetcolormap(64);
 xtitle('','$Time\ (UT)$','$Range\ (km)$')
 a.background=-1;
@@ -252,7 +254,7 @@ drawnow()
 scf(3);clf(3);f=gcf()
 drawlater()
 subplot(1,2,1)
-f.figure_size=[900,700]
+f.figure_size=[900,600]
 xtitle('','$\sigma_{a,ext}\ (km^{-1})$','$Range\ (km)$')
 a=gca();
 a.x_label.font_size=4;a.y_label.font_size=4;
@@ -265,6 +267,7 @@ ind_notok=vec((INV.nb_ok((INV.nb_tot)>0)./INV.nb_tot((INV.nb_tot)>0))<1);
 if length(ind_ok)>0 then
     if isnan(nanmean(INV.ext(ind_ok,:)))<>%T then
         plot(INV.ext(ind_ok,:)',lid.z(1:params.z2/lid.vresol)'*1E-3,'b')
+
     end
 end
 
@@ -355,7 +358,7 @@ f.children(2).zoom_box=[f.children(2).data_bounds(1),f.children(2).data_bounds(2
 
 subplot(2,1,2)
 a=gca();//a.margins=[0.1,0.1,0.10,0.15];
-a.margins=[0.085,0.15,0.1,0.20]
+a.margins=[0.085,0.15,0.1,0.15]
 xtitle('','$Time\ (UT)$',strcat(['AOD@',params.lambda]))
 a.x_label.font_size=4;
 a.y_label.font_size=3;
@@ -394,7 +397,7 @@ end
 newaxes()
 a=gca();a.filled="off";
 a.font_color=color('blue');
-a.margins=[0.085,0.15,0.55,0.1]
+a.margins=[0.085,0.15,0.55,0.075]
 a.y_location="right";
 xtitle('','','Sa (sr)')
 plot(INV.time,INV.sa,'b')
@@ -412,17 +415,11 @@ a.axes_visible=['off','on','off'];
 
 newaxes();
 a=gca();a.filled="off";
-a.margins=[0.085,0.15,0.55,0.1];
+a.margins=[0.085,0.15,0.55,0.075];
 plot(INV.time,%nan*ones(INV.sa));
 a.axes_visible=["on","off","on"];
-
-//xlabel
-xpos=f.children(4).data_bounds(3)-0.2*(f.children(3).data_bounds(4)-f.children(4).data_bounds(3))
-f.children(3).x_label.position(2)=xpos;
-
 drawnow()
 // * * * * * * * * * * * * * * * * * * * * * * * * *
-
 
 
 
@@ -445,7 +442,7 @@ INV_aod=INV.aod;INV_aod(ind_cloud)=%nan;
 
 scf(5);clf(5);f=gcf()
 xinfo('AEROSOL PROFILES')
-drawlater()
+//drawlater()
 fig=5;nb_sub=2;
 subplot(2,1,1)
 f_QLb(INV.time,lid.z(1:size(INV.ext,2))*1E-3,INV_ext(:,:)',fig,min_ext,max_ext,nb_sub)
@@ -457,7 +454,7 @@ f.children(2).zoom_box=[f.children(2).data_bounds(1),f.children(2).data_bounds(2
 
 subplot(2,1,2)
 a=gca();//a.margins=[0.1,0.1,0.10,0.15];
-a.margins=[0.085,0.15,0.1,0.20]
+a.margins=[0.085,0.15,0.1,0.15]
 xtitle('','$Time\ (UT)$',strcat(['AOD@',params.lambda]))
 a.x_label.font_size=4;
 a.y_label.font_size=3;
@@ -490,7 +487,7 @@ end
 newaxes()
 a=gca();a.filled="off";
 a.font_color=color('blue');
-a.margins=[0.085,0.15,0.55,0.1]
+a.margins=[0.085,0.15,0.55,0.075]
 a.y_location="right";
 xtitle('','','Sa (sr)')
 plot(INV.time,INV_sa,'b')
@@ -508,18 +505,11 @@ a.axes_visible=['off','on','off'];
 
 newaxes();
 a=gca();a.filled="off";
-a.margins=[0.085,0.15,0.55,0.1];
+a.margins=[0.085,0.15,0.55,0.075];
 plot(INV.time,%nan*ones(INV.sa));
 a.axes_visible=["on","off","on"];
-
-//xlabel
-xpos=f.children(4).data_bounds(3)-0.2*(f.children(3).data_bounds(4)-f.children(4).data_bounds(3))
-f.children(3).x_label.position(2)=xpos;
-
 drawnow()
 // * * * * * * * * * * * * * * * * * * * * * * * * *
-
-
 
 
 
@@ -529,37 +519,37 @@ drawnow()
 //* * * * * * * * * * * * * * * * * * * * * * * * *
 figout=strcat([path_fig,site,'/',year,month,'/',day,'/',inv_mod,'/'])
 mkdir(figout)
-xs2png(1,strcat([figout,'QL_LAY-',site,'-',year,month,day,'.png']));
+xs2bmp(1,strcat([figout,'QL_LAY-',site,'-',year,month,day,'.bmp']));
 //without layers
 scf(1);f=gcf();
 f.children(2).children(1:2).visible="off";
-xs2png(1,strcat([figout,'QL-',site,'-',year,month,day,'.png']));
+xs2bmp(1,strcat([figout,'QL-',site,'-',year,month,day,'.bmp']));
 //zoom
 f.children($).data_bounds(4)=5;
 f.children($).zoom_box=[];
-xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.bmp']))
 
 //with layers
 f.children(2).children(1:2).visible="on";
-xs2png(1,strcat([figout,'QL_LAY_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
 
 //without layers
 f.children(2).children(1:2).visible="off";
-xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.bmp']))
 f.children($).data_bounds(4)=15;
 f.children($).zoom_box=[];
 
 
-xs2png(2,strcat([figout,'LAY-',site,'-',year,month,day,'.png']))
+xs2bmp(2,strcat([figout,'LAY-',site,'-',year,month,day,'.bmp']))
 scf(2);f=gcf();
 f.children($).data_bounds(4)=5;
 f.children($).zoom_box=[];
-xs2png(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
 
-xs2png(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.png']))
-xs2png(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.png']))
-xs2png(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.png']))
-xs2png(6,strcat([figout,'SI-',site,'-',year,month,day,'.png']))
+xs2bmp(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.bmp']))
+xs2bmp(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.bmp']))
+xs2bmp(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.bmp']))
+xs2bmp(6,strcat([figout,'SI-',site,'-',year,month,day,'.bmp']))
 
 
 mprintf('%s\n','√')
