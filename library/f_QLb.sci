@@ -20,7 +20,7 @@ k=-1
 for i=1:10
     if k<0 then
         if floor(Max*10^(i-1))==Max*10^(i-1) then
-            k=i-1;
+            k=i-1
         end
     end
 end
@@ -33,7 +33,7 @@ if fig>=0 then
         subplot(nb_sub,1,1)
     end
     a = gca();f=gcf();
-    f.figure_size = [900,400*nb_sub];
+    f.figure_size = [900,450*nb_sub];
     a.tight_limits="on";
     f.background=-8;
     f.color_map=jetcolormap(nb_col)
@@ -68,7 +68,7 @@ if fig>=0 then
     
     f.children(1).margins=[0.40,0.45,0,0]
     //f.children($).margins=[0.075,0.0025,0.05,0.15]
-    f.children($).margins=[0.10,0.0025,0.05,0.15];
+    f.children($).margins=[0.10,0.0025,0.05,0.20];
     
 
 
