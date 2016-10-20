@@ -1,7 +1,7 @@
-/disk1/augustinm/distrib/distrib/BASIC/parameters/
-/disk1/augustinm/distrib/distrib/BASIC/library/
-/disk1/augustinm/distrib/distrib/BASIC/data/LID/
-/disk1/augustinm/distrib/distrib/BASIC/data/AER/
-/disk1/augustinm/distrib/distrib/BASIC/out/
-/disk1/augustinm/distrib/distrib/BASIC/fig/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/parameters/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/library/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/data/LID/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/data/AER/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/out/
+/Users/mortier/Desktop/BASIC_work/git/BASIC/fig/
 

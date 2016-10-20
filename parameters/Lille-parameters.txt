@@ -1,6 +1,6 @@
 #SITE PARAMETERS
 lid_Site	Lille
-lid_file	LOA_CE370_L1B-PR2_yyyy-mm-ddT00-00-00_1440_V1-00.txt
+lid_file	mmdd.txt
 lid_data	#
 aer_Site	Lille
 lambda	532
@@ -21,8 +21,8 @@ nproc	10
 thr1	10
 thr2	4
 #REF ALTITUDE
-Z1	4000
-Z2	6000
+Z1	6000
+Z2	8000
 #INVERSION
 ntime	20
 beta_a(zref)	5E-8

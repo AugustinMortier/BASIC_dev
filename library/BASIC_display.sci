@@ -49,7 +49,7 @@ if isnum(params.max_pr2) then
     Max_PR2=evstr(params.max_pr2);
 else
     //calcul du maximum pour QL
-    Max_PR2=round(1.5*nanmean(lid.pr2(1:100,LAY.nbcld==0)));
+    Max_PR2=round(1.5*nanmean(lid.pr2(1:100,:)));
     Max_PR2=ceil(Max_PR2/10)*10;
 end
 
@@ -529,37 +529,37 @@ drawnow()
 //* * * * * * * * * * * * * * * * * * * * * * * * *
 figout=strcat([path_fig,site,'/',year,month,'/',day,'/',inv_mod,'/'])
 mkdir(figout)
-xs2png(1,strcat([figout,'QL_LAY-',site,'-',year,month,day,'.png']));
+xs2bmp(1,strcat([figout,'QL_LAY-',site,'-',year,month,day,'.bmp']));
 //without layers
 scf(1);f=gcf();
 f.children(2).children(1:2).visible="off";
-xs2png(1,strcat([figout,'QL-',site,'-',year,month,day,'.png']));
+xs2bmp(1,strcat([figout,'QL-',site,'-',year,month,day,'.bmp']));
 //zoom
 f.children($).data_bounds(4)=5;
 f.children($).zoom_box=[];
-xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.bmp']))
 
 //with layers
 f.children(2).children(1:2).visible="on";
-xs2png(1,strcat([figout,'QL_LAY_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
 
 //without layers
 f.children(2).children(1:2).visible="off";
-xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.bmp']))
 f.children($).data_bounds(4)=15;
 f.children($).zoom_box=[];
 
 
-xs2png(2,strcat([figout,'LAY-',site,'-',year,month,day,'.png']))
+xs2bmp(2,strcat([figout,'LAY-',site,'-',year,month,day,'.bmp']))
 scf(2);f=gcf();
 f.children($).data_bounds(4)=5;
 f.children($).zoom_box=[];
-xs2png(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.png']))
+xs2bmp(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
 
-xs2png(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.png']))
-xs2png(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.png']))
-xs2png(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.png']))
-xs2png(6,strcat([figout,'SI-',site,'-',year,month,day,'.png']))
+xs2bmp(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.bmp']))
+xs2bmp(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.bmp']))
+xs2bmp(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.bmp']))
+xs2bmp(6,strcat([figout,'SI-',site,'-',year,month,day,'.bmp']))
 
 
 mprintf('%s\n','√')

@@ -59,15 +59,19 @@ scilab -nb -nw -nouserstartup -f ./BASIC.sce -args Lille 14 03 30 sa_50 fig
 
 Several figures are created including:
 
-![Attenuated Backscatter Profiles](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/QL-Lille-140330.png "Attenuated Backscatter Profiles")
+![Attenuated Backscatter Profiles](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/QL-Lille-140330.bmp "Attenuated Backscatter Profiles")
 Attenuated Backscatter Profiles - Lille 30/03/2014.
 
 
-![Layers](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/LAY-Lille-140330.png "Clouds and Aerosol Layers")
+![Layers](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/LAY-Lille-140330.bmp "Clouds and Aerosol Layers")
 Clouds and Aerosol Layers - Lille 30/03/2014.  
 Note: better clouds detection is found when PR2 are used as input for Lidar file instead of ln(PR2)
 
-![Iversion](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/EXTSA-Lille-140330.png "Extinction profiles and Lidar Ratio")
+![Slope Index](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/SI-Lille-140330.bmp "Slope Index")
+Slope Index - Lille 30/03/2014.  
+This parameter shows how the Lidar signal fits with a theoritical molecular signal at high altitude. The best quality index is 1. Profiles associated with SI>0.5 and SI<1.5 reveal a poor agreement with the molecular slope and might reveal a low signal, or the presence of residual aerosols/clouds at the reference point (found between Zref_min and Zref_max) 
+
+![Iversion](https://github.com/AugustinMortier/BASIC/blob/master/fig/Lille/1403/30/aod/EXTSA-Lille-140330.bmp "Extinction profiles and Lidar Ratio")
 Extinction profiles, AOD and Lidar Ratio - Lille 30/03/2014.
 
 ## Parameters file description
