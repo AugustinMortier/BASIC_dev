@@ -86,14 +86,17 @@ for i=1:size(PR2,2)
         bl(i)=bl(i)+iblmin;
     end
     
+    bl(i)=bl(i)-a/2;
     
     // - - - - - - - - - - - - - - - - - - - - - - - - 
     //if cloud detected, zmax has to be under the base
     if  base_cld(i)<=zmax_tlrec then
+        //if base_cld(i)>=1500 then
         if base_cld(i)>=1500 then
-            zmax_tl=base_cld(i)-300;
+            zmax_tl=base_cld(i)-vresol;//300;
         else
-            zmax_tl=base_cld(i);
+            //zmax_tl=base_cld(i);
+         zmax_tl=base_cld(i)-vresol;
         end
     end
     // - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -104,7 +107,30 @@ for i=1:size(PR2,2)
     
     
 // top layer    
-    thr=3;
+//    thr=3;//3
+//    [err,i6500]=min(abs(6500-lid_z));
+//    [err,i7000]=min(abs(7000-lid_z));
+//    
+//    
+//    moy=mean(con(i6500:i7000));
+//    std=stdev(con(i6500:i7000));
+//    over=[]
+//    while (length(over)==0)
+//        if thr<=2.5 then//2.5
+//            break
+//        end
+//        thr=thr-0.05;
+//        thr_over=(moy+thr*std);
+//        
+//        if bl(i)<itlmax then
+//            over=find(con(bl(i)+a:itlmax)>=thr_over);
+//        else
+//            break
+//        end
+//    end
+
+    //start with the lowest threshold
+    thr=2.5;//3
     [err,i6500]=min(abs(6500-lid_z));
     [err,i7000]=min(abs(7000-lid_z));
     
@@ -112,23 +138,26 @@ for i=1:size(PR2,2)
     moy=mean(con(i6500:i7000));
     std=stdev(con(i6500:i7000));
     over=[]
-    while (length(over)==0)
-        if thr<=2.5 then
-            break
-        end
-        thr=thr-0.05;
+    //while (length(over)==0)
+    //    if thr<=2.5 then//2.5
+    //        break
+    //    end
+    //    thr=thr-0.05;
         thr_over=(moy+thr*std);
         
-        over=find(con(1:itlmax)>=thr_over);
-    end
+        if bl(i)<itlmax then
+            over=find(con(bl(i)+a:itlmax)>=thr_over);
+    //    else
+    //        break
+        end
+    //end
     
     if length(over)>0 then
         //recupere juste si au dessus du seuil.
-        tl(i)=over($)-a/2;
+        tl(i)=over($)+bl(i);
     end
 end
 
-bl=bl-a/2;
 
 
 endfunction

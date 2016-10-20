@@ -361,7 +361,7 @@ a.x_label.font_size=4;
 a.y_label.font_size=3;
 plot(INV.time,INV.aod,'r')
 a.children.children.mark_mode="on";
-a.children.children.mark_size=3;
+a.children.children.mark_size=5;
 a.children.children.line_style=8;
 //better for Oslo
 a.children.children.line_mode='off';
@@ -402,7 +402,7 @@ plot(INV.time,INV.sa,'b')
 a=gca();
 a.y_label.font_size=3;
 a.children.children.mark_mode="on";
-a.children.children.mark_size=3;
+a.children.children.mark_size=5;
 a.children.children.line_style=8;
 //better for Oslo
 a.children.children.line_mode='off';
@@ -464,7 +464,7 @@ a.y_label.font_size=3;
 
 plot(INV.time,INV_aod,'r')
 a.children.children.mark_mode="on";
-a.children.children.mark_size=3;
+a.children.children.mark_size=5;
 a.children.children.line_style=8;
 //better for Oslo
 a.children.children.line_mode='off';
@@ -498,7 +498,7 @@ plot(INV.time,INV_sa,'b')
 a=gca();
 a.y_label.font_size=3;
 a.children.children.mark_mode="on";
-a.children.children.mark_size=3;
+a.children.children.mark_size=5;
 a.children.children.line_style=8;
 //better for Oslo
 a.children.children.line_mode='off';

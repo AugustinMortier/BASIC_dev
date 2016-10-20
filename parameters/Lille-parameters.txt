@@ -17,7 +17,7 @@ zmin_bl	330
 zmax_bl	3000
 zmax_tl	4000
 #CLOUDING
-nproc	10
+nproc	2
 thr1	10
 thr2	4
 #REF ALTITUDE
@@ -33,5 +33,6 @@ max_pr2	Auto
 min_ext	Auto
 max_ext	Auto
 min_aod	0
-max_aod	0.3
+max_aod Auto
+
 

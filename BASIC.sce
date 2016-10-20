@@ -81,9 +81,6 @@ mprintf('%s %s %s %s %s \n',site,'-',year,month,day)
 //
 //site="LILAS-AN532";year="14";month="03";day="30";fig=1;out=1;
 //site="Lille";year="14";month="03";day="30";fig=1;out=1;
-//
-////site="Oslo";year="14";month="09";day="01";fig=1;out=1;
-//
 //aer_level="lev15";inv_mod="aod";sa_apriori=[];
 
 

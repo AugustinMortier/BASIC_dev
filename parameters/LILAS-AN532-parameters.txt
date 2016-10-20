@@ -32,5 +32,5 @@ max_pr2	Auto
 min_ext	Auto
 max_ext	Auto
 min_aod	0
-max_aod	0.5
+max_aod	Auto
 
