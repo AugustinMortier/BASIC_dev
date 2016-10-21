@@ -157,7 +157,11 @@ BASE2=%nan*ones(10,length(lid_time));PEAK2=BASE2;TOP2=BASE2;
 for i=vec
 //    printf('%i\n',i)
     //pr2_avg=mean(pr2(:,i-pastime/2:i+pastime/2),'c');
-    ind=[vec(i)-nprol/2:vec(i)+nprol/2];
+    if nproc>=2
+        ind=[vec(i)-nproc/2:vec(i)+nproc/2];
+    else
+        ind=vec(i);
+    end
     indok=ind((ind)>0 & (ind)<=length(vec));
     pr2_avg=mean(pr2(:,indok),'c');
     [base,peak,top,base2,peak2,top2]=clouderive(z,zmin,pr2_avg,thr1,thr2);
