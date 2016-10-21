@@ -1,4 +1,4 @@
-function[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,nprol,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod]=param_read(site)
+function[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,nprol,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod,fmt]=param_read(site)
 //Read parameters file for site
 //
 
@@ -35,6 +35,7 @@ min_ext=tokens(params(33));min_ext=min_ext(2);
 max_ext=tokens(params(34));max_ext=max_ext(2);
 min_aod=tokens(params(35));min_aod=min_aod(2);
 max_aod=tokens(params(36));max_aod=max_aod(2);
+fmt=tokens(params(37));fmt=fmt(2);
 
 // - - - - - - - - - - - - - - - - - - - - - - - -
 

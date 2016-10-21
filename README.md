@@ -113,4 +113,5 @@ min_ext Auto / float
 max_ext Auto / float
 min_aod Auto / float
 max_aod Auto / float
+fmt png/jpg/bmp : format of pictures exported. In some configurations, the only bmp format might work under MacOS 
 ```

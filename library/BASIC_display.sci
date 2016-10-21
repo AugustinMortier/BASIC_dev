@@ -550,17 +550,38 @@ f.children($).data_bounds(4)=15;
 f.children($).zoom_box=[];
 
 
-xs2bmp(2,strcat([figout,'LAY-',site,'-',year,month,day,'.bmp']))
-scf(2);f=gcf();
-f.children($).data_bounds(4)=5;
-f.children($).zoom_box=[];
-xs2bmp(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
-
-xs2bmp(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.bmp']))
-xs2bmp(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.bmp']))
-xs2bmp(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.bmp']))
-xs2bmp(6,strcat([figout,'SI-',site,'-',year,month,day,'.bmp']))
-
+select params.fmt
+case 'bmp' then
+    xs2bmp(2,strcat([figout,'LAY-',site,'-',year,month,day,'.bmp']))
+    scf(2);f=gcf();
+    f.children($).data_bounds(4)=5;
+    f.children($).zoom_box=[];
+    xs2bmp(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.bmp']))
+    xs2bmp(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.bmp']))
+    xs2bmp(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.bmp']))
+    xs2bmp(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.bmp']))
+    xs2bmp(6,strcat([figout,'SI-',site,'-',year,month,day,'.bmp']))
+case 'jpg' then
+    xs2jpg(2,strcat([figout,'LAY-',site,'-',year,month,day,'.jpg']))
+    scf(2);f=gcf();
+    f.children($).data_bounds(4)=5;
+    f.children($).zoom_box=[];
+    xs2jpg(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.jpg']))
+    xs2jpg(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.jpg']))
+    xs2jpg(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.jpg']))
+    xs2jpg(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.jpg']))
+case 'png' then
+    xs2png(2,strcat([figout,'LAY-',site,'-',year,month,day,'.png']))
+    scf(2);f=gcf();
+    f.children($).data_bounds(4)=5;
+    f.children($).zoom_box=[];
+    xs2png(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.png']))
+    xs2png(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.png']))
+    xs2png(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.png']))
+    xs2png(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.png']))
+else
+    mprintf('%s\n','Unknown Format')
+end
 
 mprintf('%s\n','√')
 catch

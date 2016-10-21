@@ -34,5 +34,4 @@ min_ext	Auto
 max_ext	Auto
 min_aod	0
 max_aod Auto
-
-
+fmt png // png,jpg,bmp
