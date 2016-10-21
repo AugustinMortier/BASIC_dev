@@ -1,4 +1,4 @@
-function[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,nprol,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod,fmt]=param_read(site)
+function[lid_site,lid_file,lid_data,lid_var,aer_site,lambda,zmin,extrap_typ,width_f,nprol,width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,nproc,thr1,thr2,z1,z2,ntime,beta_a_zref,theta,min_pr2,max_pr2,min_ext,max_ext,min_aod,max_aod,fmt]=param_read(site)
 //Read parameters file for site
 //
 
@@ -7,36 +7,44 @@ function[lid_site,lid_file,lid_data,aer_site,lambda,zmin,extrap_typ,width_f,npro
 //params=read_csv(strcat([path_parameters,site,'-parameters.txt']),"\t");
 params=mgetl(strcat([path_parameters,site,'-parameters.txt']));
 
-lid_site=tokens(params(2));lid_site=lid_site(2);
-lid_file=tokens(params(3));lid_file=lid_file(2);
-lid_data=tokens(params(4));lid_data=lid_data(2);
-aer_site=tokens(params(5));aer_site=aer_site(2);
-lambda=tokens(params(6));lambda=lambda(2);
-zmin=tokens(params(8));zmin=evstr(zmin(2));
-extrap_typ=tokens(params(9));extrap_typ=extrap_typ(2);
-width_f=tokens(params(11));width_f=evstr(width_f(2));
-nprol=tokens(params(13));nprol=evstr(nprol(2));
-width_wave=tokens(params(14));width_wave=evstr(width_wave(2));
-thr_cloud=tokens(params(15));thr_cloud=evstr(thr_cloud(2));
-zmin_bl=tokens(params(16));zmin_bl=evstr(zmin_bl(2));
-zmax_bl=tokens(params(17));zmax_bl=evstr(zmax_bl(2));
-zmax_tl=tokens(params(18));zmax_tl=evstr(zmax_tl(2));
-nproc=tokens(params(20));nproc=evstr(nproc(2));
-thr1=tokens(params(21));thr1=evstr(thr1(2));
-thr2=tokens(params(22));thr2=evstr(thr2(2));
-z1=tokens(params(24));z1=evstr(z1(2));
-z2=tokens(params(25));z2=evstr(z2(2));
-ntime=tokens(params(27));ntime=evstr(ntime(2));
-beta_a_zref=tokens(params(28));beta_a_zref=evstr(beta_a_zref(2));
-theta=tokens(params(29));theta=evstr(theta(2));
-min_pr2=tokens(params(31));min_pr2=min_pr2(2);
-max_pr2=tokens(params(32));max_pr2=max_pr2(2);
-min_ext=tokens(params(33));min_ext=min_ext(2);
-max_ext=tokens(params(34));max_ext=max_ext(2);
-min_aod=tokens(params(35));min_aod=min_aod(2);
-max_aod=tokens(params(36));max_aod=max_aod(2);
-fmt=tokens(params(37));fmt=fmt(2);
-
+for nl=2:38
+    line=tokens(params(nl));
+    if size(line,1)>=2
+        param=line(2);
+    end
+    select nl
+        case 2 then lid_site=param;
+        case 3 then lid_file=param;
+        case 4 then lid_data=param;
+        case 5 then lid_var=param;
+        case 6 then aer_site=param;
+        case 7 then lambda=param;
+        case 9 then zmin=evstr(param);
+        case 10 then extrap_typ=param;
+        case 12 then width_f=evstr(param);
+        case 14 then nprol=evstr(param);
+        case 15 then width_wave=evstr(param);
+        case 16 then thr_cloud=evstr(param);
+        case 17 then zmin_bl=evstr(param);
+        case 18 then zmax_bl=evstr(param);
+        case 19 then zmax_tl=evstr(param);
+        case 21 then nproc=evstr(param);
+        case 22 then thr1=evstr(param);
+        case 23 then thr2=evstr(param);
+        case 25 then z1=evstr(param);
+        case 26 then z2=evstr(param);
+        case 28 then ntime=evstr(param);
+        case 29 then beta_a_zref=evstr(param);
+        case 30 then theta=evstr(param);
+        case 32 then min_pr2=param;
+        case 33 then max_pr2=param;
+        case 34 then min_ext=param;
+        case 35 then max_ext=param;
+        case 36 then min_aod=param;
+        case 37 then max_aod=param;
+        case 38 then fmt=param;
+    end
+end
 // - - - - - - - - - - - - - - - - - - - - - - - -
 
 endfunction

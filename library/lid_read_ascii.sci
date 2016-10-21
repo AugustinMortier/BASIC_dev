@@ -1,4 +1,4 @@
-function[lid_time,pr2,z,vresol]=lid_read_ascii(lid_site,lid_file,year,month,day)
+function[lid_time,pr2,z,vresol]=lid_read_ascii(lid_site,lid_file,lid_var,year,month,day)
 //Reading Lidar Ascii files downloaded from LOA
 // A. Mortier - 24/06/2014
 
@@ -52,8 +52,10 @@ j=1;
 //        mprintf('%s\n','read pr2 and not ln(pr2) !')
 for i=1:size(all_time,1)
     if all_time(i)==prev_time then
-        pr2(all_z(i)/vresol+1,j)=exp(all_pr2(i));
-//        pr2(all_z(i)/vresol+1,j)=all_pr2(i);
+        select lid_var
+        case 'lnpr2' then pr2(all_z(i)/vresol+1,j)=exp(all_pr2(i));
+        case 'pr2' then pr2(all_z(i)/vresol+1,j)=all_pr2(i);
+        end
     else
         prev_time=all_time(i);
         j=j+1;

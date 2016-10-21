@@ -2,11 +2,12 @@
 lid_Site	Lille
 lid_file	mmdd.txt
 lid_data	#
+lid_var lnpr2   //pr2,lnpr2
 aer_Site	Lille
 lambda	532
 #EXTRAPOLATION
 zmin	300
-type	cst	lin/cst
+type	cst	//lin,cst
 #SPECTRAL FILTERING
 width	0.5
 #LAYERS
@@ -34,4 +35,4 @@ min_ext	Auto
 max_ext	Auto
 min_aod	0
 max_aod Auto
-fmt png // png,jpg,bmp
+fmt bmp // png,jpg,bmp

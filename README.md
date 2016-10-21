@@ -81,6 +81,7 @@ Extinction profiles, AOD and Lidar Ratio - Lille 30/03/2014.
 lid_Site : name of the Lidar Site
 lid_file=LOA_CE370_L1B-PR2_yyyy-mm-ddT00-00-00_1440_V1-00.nc : name of Lidar file
 lid_data=rcs_532_nop_ph_l0_t0 : name of RCS field (NetCDF)
+lid_var=lnpr2 / pr2 :  the lid_file contains wether Range Corrected Signal (pr2), or lnpr2 
 aer_Site : name of the co-located AERONET station
 lambda=532 : Wavelength (nm)
 #EXTRAPOLATION
