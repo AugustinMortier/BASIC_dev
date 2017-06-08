@@ -1,4 +1,4 @@
-# BASIC v1.5
+# BASIC dev
 Software (Scilab running) for Lidar/Sun photometer data processing and visualization
 
 
