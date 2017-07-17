@@ -71,28 +71,25 @@ mprintf('%s %s %s %s %s \n',site,'-',year,month,day)
 // - - - - - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 
-//
-//site="OPGC";year="12";month="03";day="28";aer_level="lev15";here="/Users/mortier/Desktop/BASIC/";inv_mod="aod";sa_apriori=[];
-//site="Palaiseau";year="12";month="03";day="22";aer_level="lev15";here="/Users/mortier/Desktop/BASIC_work/BASIC/";inv_mod="aod";sa_apriori=[];fig=1;
-//site="OPE";year="12";month="03";day="20";aer_level="lev10";here="/Users/mortier/Desktop/BASIC_work/BASIC/";fig=1;inv_mod="aod";sa_apriori=[];
-//site="Lille";year="12";month="03";day="20";aer_level="lev10";here="/Users/mortier/Desktop/BASIC_work/BASIC/";inv_mod="aod";sa_apriori=[];fig=1;
-//site="Beijing";year="14";month="01";day="02";aer_level="lev10";here="/Users/mortier/Desktop/postdoc/Beijing/work/BASIC/";inv_mod="sa";sa_apriori="70";fig=1;out=1;
-//site="LILAS-AN532";year="14";month="03";day="29";fig=1;out=1;
+////
+////site="OPGC";year="12";month="03";day="28";aer_level="lev15";here="/Users/mortier/Desktop/BASIC/";inv_mod="aod";sa_apriori=[];
+////site="Palaiseau";year="12";month="03";day="22";aer_level="lev15";here="/Users/mortier/Desktop/BASIC_work/BASIC/";inv_mod="aod";sa_apriori=[];fig=1;
+////site="OPE";year="12";month="03";day="20";aer_level="lev10";here="/Users/mortier/Desktop/BASIC_work/BASIC/";fig=1;inv_mod="aod";sa_apriori=[];
+////site="Lille";year="12";month="03";day="20";aer_level="lev10";here="/Users/mortier/Desktop/BASIC_work/BASIC/";inv_mod="aod";sa_apriori=[];fig=1;
+////site="Beijing";year="14";month="01";day="02";aer_level="lev10";here="/Users/mortier/Desktop/postdoc/Beijing/work/BASIC/";inv_mod="sa";sa_apriori="70";fig=1;out=1;
+////site="LILAS-AN532";year="14";month="03";day="29";fig=1;out=1;
 //
 //here="/home/augustinm/Desktop/BASIC/";
+////site="LILAS-AN532_p";year="14";month="10";day="31";fig=1;out=1;
 //site="Oslo";year="14";month="01";day="01";fig=1;out=1;
 //site="Oslo";year="13";month="08";day="26";fig=1;out=1;
 //site="Oslo";year="15";month="05";day="21";fig=1;out=1;
 //site="Flesland";year="15";month="05";day="04";fig=1;out=1;
-
-
-
-//site="LILAS-AN532_p";year="14";month="10";day="31";fig=1;out=1;
-
-
+//site="Oslo";year="17";month="06";day="27";fig=1;out=1;
+//
 //aer_level="lev15";inv_mod='aod';
-inv_mod="sa";sa_apriori=50;
-here = get_absolute_file_path('BASIC.sce')
+//inv_mod="sa";sa_apriori=50;
+//here = get_absolute_file_path('BASIC.sce')
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - 

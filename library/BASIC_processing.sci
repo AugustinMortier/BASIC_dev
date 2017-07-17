@@ -29,7 +29,6 @@ thr_cloud=params.thr_cloud;
 zmin_bl=params.zmin_bl;
 zmax_bl=params.zmax_bl;
 zmax_tl=params.zmax_tl;
-thr_tl=params.thr_tl;
 nproc=params.nproc;
 thr1=params.thr1;
 thr2=params.thr2;
@@ -234,7 +233,7 @@ try
 //               Altitude Layers                  
 // - - - - - - - - - - - - - - - - - - - - - - - - 
 //if clouds detected, zmax_bl/tl < base(cloud)
-[i_bl,i_tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,pr2,z,BASE2(1,:),nprol,thr_tl);
+[i_bl,i_tl]=cov_haarv2(width_wave,thr_cloud,zmin_bl,zmax_bl,zmax_tl,pr2,z,BASE2(1,:),nprol);
 //indice to altitude
 bl=%nan*ones(i_bl);tl=bl;
 bl(i_bl>0)=z(i_bl(i_bl>0));
@@ -373,6 +372,7 @@ BL=[];TL=[];SI=[];
 
 //for each aod, average of pr2 during ntime then ref altitude then klett
 for i=1:length(aod)
+    
     //average of pr2
     ind=find(lid_time<aod_time(i)+ntime/(2*0.6*100) & lid_time>aod_time(i)-ntime/(2*0.6*100));
     nb_tot=[nb_tot,length(ind)];
@@ -380,9 +380,6 @@ for i=1:length(aod)
     //check if clouds in profiles
     ind_clear=find(flagcld(ind)==0);
     ind_cloudover=find(flagcld(ind)>z2);
-//    // * * * * * * * * 
-//    ind_cloudover=[];
-//    // * * * * * * * * 
     ind_ok=ind(gsort([ind_clear,ind_cloudover],'c','i'));
     
     if length(ind_ok)>0 then
@@ -415,11 +412,11 @@ for i=1:length(aod)
         // - - - - - - - - - - - - - - - - - - - - - - - - 
         if inv_mod=="aod" then
             zmin_inv=z(1);//not used
-            [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta);
+            [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,extrap_typ);
         end
         if inv_mod=="sa" then
             zmin_inv=z(1);//not used
-            [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,sa_apriori);
+            [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,sa_apriori,extrap_typ);
         end
 
 
@@ -464,11 +461,11 @@ for i=1:length(aod)
             // - - - - - - - - - - - - - - - - - - - - - - - - 
             if inv_mod=="aod" then
                 zmin_inv=z(1);//not used
-                [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta);
+                [beta_a,sa,xx,err_aod]=Inv_Klett_aod(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,extrap_typ);
             end
             if inv_mod=="sa" then
                 zmin_inv=z(1);//not used
-                [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,sa_apriori);
+                [beta_a,sa,aod(i),err_aod]=Inv_Klett_sa(pr2_inv,bmol,aod(i),zref,zmin_inv,beta_a_zref,vresol,theta,sa_apriori,extrap_typ);
             end
             
             beta_a(length(beta_a):z2/vresol)=0;
