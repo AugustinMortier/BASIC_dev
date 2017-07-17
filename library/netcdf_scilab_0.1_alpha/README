@@ -1,0 +1,85 @@
+
+This is a small library for reading NetCDF files in Scilab.
+
+WARNING:  It is nowhere near complete.  It only implements a 
+          couple basic functions for reading data from netcdf 
+          files, and I'm distributing it only because other
+          people may find that useful, or (hopefully) may want
+          to extend it into a full package.  Consider it an alpha.
+
+And now for the usual disclaimer:
+    The author, or authors, claim no responsibility for anything resulting 
+    from the use or misuse of this software.  Use at your own risk.
+
+I'm distributing this under the LGPL (note LGPL, not GPL) so anyone 
+can use it, even within a commercial distribution, and can extend
+it.  Please, if you do add extensions, send them to me, and I'm 
+happy to integrate them in and add you to the credits.
+
+Requirements:
+    A dynamically built NetCDF library
+
+    I built this package using a netcdf package built as a shared library,
+    putting the .so file in the current directory.  I did this by building
+    netcdf with extra C flags (-fPIC) to produce object files compatible
+    with becoming linked into a .so file, then did a cc -o libnetcdf.so *.o
+    to package it.  Then I copied the .so file to the package directory.
+    There should be nothing stopping you from doing the same.  
+
+    As a result, I happen to have a libnetcdf.so file for Linux
+    on x86_64 (Opteron).  I can supply that to you if you wish.
+
+    It might be possible to build using a standard static netcdf 
+    library.  If you accomplish this, send me the instructions, 
+    and I'll include them.
+
+To build:
+    cd scilab_netcdf_version
+    scilab -nw -f sci_netcdf_builder.sce
+
+    Or, if the netcdf.h file is not in the standard include path:
+    (mine is in /array/apps/shared/include)
+        CPPFLAGS='-I/array/apps/shared/include' scilab -nw -f sci_netcdf_builder.sce
+    
+To use in a scilab session:
+    scilab -nw -f path/sci_netcdf_loader.sce
+
+Available functions:
+    At the moment, I only needed to extract data, so I've supplied
+    some functions for reading some common data types from netcdf
+    files.
+
+    Opening and closing netcdf files:
+        file_descriptor = netcdf_open(filename)
+        netcdf_close(file_descriptor)
+
+    Reading Data: (for getting float/doubles, integers, and strings)
+        data = netcdf_getFloatVar(file_descriptor, name)
+        data = netcdf_getIntVar(file_descriptor, name)
+        data = netcdf_getCharVar(file_descriptor, name)
+    
+
+Example Usage: 
+    # Assuming a file called R1900022_023.nc, which happens to be a data
+    # file from the ARGO float project.  See:
+    # 
+
+    fd = netcdf_open('R1900022_023.nc')
+    float_id    = netcdf_getCharVar(fd,  'PLATFORM_NUMBER');
+    latitude    = netcdf_getFloatVar(fd, 'LATITUDE')
+    longitude   = netcdf_getFloatVar(fd, 'LONGITUDE')
+    pressure    = netcdf_getFloatVar(fd, 'PRES')
+    temperature = netcdf_getFloatVar(fd, 'TEMP')
+    netcdf_close(fd)
+
+
+If you wish to extend this to support more functions, I suggest
+reading the documentation for netcdf (man pages) and intersci, at:
+http://www.scilab.org/product/index_product.php?page=old_documentation.html
+
+Copyright (C) Duane Currie, 2006.  
+Distributed under the LGPL license.  See the file LICENSE.TXT for details.
+
+The libnetcdf.so is distributed under the license for netcdf 3.6.0
+from UCAR/UniData, which is located in the file COPYRIGHT.netcdf
+

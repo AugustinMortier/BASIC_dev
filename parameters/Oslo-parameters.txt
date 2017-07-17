@@ -1,0 +1,42 @@
+#SITE PARAMETERS
+lid_Site	Oslo
+lid_file	Oslo_1064_yyyymmdd.txt
+lid_data	#
+aer_Site	Birkenes
+lambda	1064
+#EXTRAPOLATION
+zmin	450
+type	cst	lin/cst
+#SPECTRAL FILTERING
+width	0.9
+#LAYERS
+nprol	5
+width	210
+thr_cloud	-100
+zmin_bl	480
+zmax_bl	3000
+zmax_tl	5000
+thr_tl	1.0
+#CLOUDING
+nproc	10
+thr1	5
+thr2	20
+#REF ALTITUDE
+Z1	4000
+Z2	6000
+#INVERSION
+ntime	60
+beta_a(zref)	2E-8
+theta	00
+#DISPLAY
+min_pr2	20
+max_pr2	500
+min_ext	0
+max_ext	0.05
+min_aod	0
+max_aod	0.10
+min_ext2	-0.005	#figure3
+max_ext2	0.10
+min_aod2	0
+max_aod2	0.3
+

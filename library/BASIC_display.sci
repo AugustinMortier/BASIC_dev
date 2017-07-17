@@ -1,0 +1,733 @@
+function[]=BASIC_display(params,lid,aer,LAY,INV)
+
+//Plot Results of BASIC
+//fig1 : Quick Look of RCS
+//fig2 : Layers (BL, TL and clouds)
+//fig3 : Extinction profiles and Histogramm of Sa
+//fig4 : Quick Look of Extinction Profiles, and temporal series of AOD and Sa
+
+mprintf('%s\t\t','Display Figures')
+try
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//               STANDARD FIGURES                     
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//decimal axis if scilab 5.5.0
+vers=getversion();
+vers=part(vers,strindex(vers,'-')+1:length(vers));
+points=strindex(vers,'.');
+vers=evstr(part(vers,1:points($)-1));
+
+f=sdf()
+f.background=-2;
+f.children(1).font_color=-1;
+f.children(1).foreground=-1;
+f.children(1).font_size=3;
+f.children(1).x_label.font_size=4;
+f.children(1).y_label.font_size=4;
+f.children(1).title.font_size=4;
+f.figure_size=[900,400];
+a=sda()
+a.grid=[-1,-1];a.font_size=3;a.title.font_size=4;
+a.font_color=-1;a.foreground=-1;a.hidden_axis_color=-1;
+a.margins=[0.1,0.1,0.1,0.1];
+a.tight_limits="on";
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//                   QUICK LOOK                     
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//mean_lidpr2=nanmean(lid.pr2(LAY.nbcld==0));
+////power=log10(round(mean_lidpr2));
+//power=real(log10(mean_lidpr2));
+//lid.pr2=100*lid.pr2/(10^(ceil(power)));
+
+
+//min-max
+if isnum(params.min_pr2) then
+    Min_PR2=evstr(params.min_pr2);
+    if Min_PR2<=0 then
+        Min_PR2=1;
+    end
+else
+    Min_PR2=1;
+end
+
+if isnum(params.max_pr2) then
+    Max_PR2=evstr(params.max_pr2);
+else
+    //calcul du maximum pour QL
+    Max_PR2=round(1.5*nanmean(lid.pr2(1:100,LAY.nbcld==0)));
+    Max_PR2=ceil(Max_PR2/10)*10;
+end
+
+pr2_tmp=lid.pr2;
+pr2_tmp((pr2_tmp)<=0)=0.1;
+
+
+fig=1;nb_sub=1;
+//f_QLb(lid.time,lid.z(1:$)*1E-3,lid.pr2(1:$,:),fig,Min_PR2,Max_PR2,nb_sub);
+f_QLb(lid.time,lid.z(1:$)*1E-3,log(pr2_tmp),fig,log(Min_PR2),log(Max_PR2),nb_sub);
+scf(fig);f=gcf();
+f.children(1).auto_ticks=["off","on","on"];
+
+drawlater()
+f=gcf();
+f.children(1).title.text="$ln(P(r).r^2)$"
+
+
+//add bl and tl
+plot(LAY.time,LAY.bl*1e-3)
+plot(LAY.time,LAY.tl*1e-3)
+a=gca();
+a.children(1:2).children.line_mode='off';
+a.children(1:2).children.mark_mode='on';
+if vers>=5.5 then
+    a.children(1:2).children.mark_size=4;
+else
+    a.children(1:2).children.mark_size=2;
+    
+end
+
+a.children(1).children.mark_foreground=-2;
+
+drawnow()
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//              FIGURES PLOT               
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//scf(2);clf(2);f=gcf();
+//drawlater()
+//a=gca();a.margins=[0.1,0.1,0.10,0.15]
+//f.figure_size = [900,400];
+//xtitle('','Time (UT)','Range (km)')
+//plot(LAY.time(LAY.bl>0),LAY.bl(LAY.bl>0)*1E-3,'k')
+//plot(LAY.time(LAY.tl>0),LAY.tl(LAY.tl>0)*1E-3,'r')
+//a.children.children.line_mode="off";
+//a.children.children.mark_mode="on";
+//a.children.children.mark_size=2;
+//a.children.children(1).mark_foreground=-1;
+//a.children.children(2).mark_foreground=5;
+//plot(LAY.time,LAY.base(:,1:5)*1E-3,'b')
+//plot(LAY.time,LAY.top(:,1:5)*1E-3,'b')
+//a.children(1).children.line_mode="off";
+//a.children(1).children.mark_mode="on";
+//a.children(1).children.mark_size=2;
+//a.children(1).children.mark_foreground=4;
+//a.children(2).children.line_mode="off";
+//a.children(2).children.mark_mode="on";
+//a.children(2).children.mark_size=2;
+//a.children(2).children.mark_foreground=4;
+//a.data_bounds(4)=15;
+//a.data_bounds(3)=0;
+//drawnow()
+
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//                   SLOPE INDEX                    
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+fig=6;
+thr_si=0.50;
+ind_good=find(LAY.si>=1-thr_si & LAY.si<=1+thr_si);
+ind_med=find(LAY.si<1-thr_si | LAY.si>1+thr_si);
+ind_bad=find(LAY.si<0 | LAY.si>2);
+
+scf(fig);clf(fig);
+f=gcf();a=gca();
+f.figure_size=[900,400];
+drawlater()
+xtitle('','$Time\ (UT)$','$Slope\ Index$')
+f.figure_size=[900,400];
+a.x_label.font_size=4;a.y_label.font_size=4;
+a.margins=[0.085,0.15,0.05,0.15];
+//a.box='on';
+
+plot(LAY.time,LAY.si)
+plot(LAY.time,(1-thr_si)*ones(LAY.time),'k')
+plot(LAY.time,(1+thr_si)*ones(LAY.time),'k')
+a.children($).children.foreground=color('lightgray');
+a.children(1:2).children.line_style=8;
+
+if isempty(ind_good)==%F then
+    plot(LAY.time(ind_good),LAY.si(ind_good));
+    a.children(1).children.line_mode="off";
+    a.children(1).children.mark_mode="on";
+    a.children(1).children.mark_size=3;
+    a.children(1).children.mark_foreground=color("green");
+end
+if isempty(ind_med)==%F then
+    plot(LAY.time(ind_med),LAY.si(ind_med));
+    a.children(1).children.line_mode="off";
+    a.children(1).children.mark_mode="on";
+    a.children(1).children.mark_size=3;
+    a.children(1).children.mark_foreground=color("orange");
+end
+
+LAY.si_b=LAY.si;
+LAY.si_b((LAY.si_b)<-1.98)=-1.98;
+LAY.si_b((LAY.si_b)>3.98)=3.98;
+
+if isempty(ind_bad)==%F then
+    plot(LAY.time(ind_bad),LAY.si_b(ind_bad))
+    a.children(1).children.line_mode="off";
+    a.children(1).children.mark_mode="on";
+    a.children(1).children.mark_size=3;
+    a.children(1).children.mark_foreground=color("red");
+end
+a.data_bounds(3)=-2;a.data_bounds(4)=4;
+drawnow()
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//                   SCI INDEX                    
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+fig=7;
+
+scf(fig);clf(fig);
+drawlater()
+f=gcf();a=gca();
+f.figure_size=[900,400];
+cmap=[name2rgb('white');name2rgb('blue');name2rgb('pink');name2rgb('lightblue');name2rgb('orange')]/255;
+f.color_map=cmap;
+fmt_ok=strcat(['%i'])
+Min=0;Max=4
+colorbar(Min,Max)
+
+
+//drawlater()
+xtitle('','$Time\ (UT)$','$SCI$')
+f.figure_size=[900,200];
+a.x_label.font_size=4;a.y_label.font_size=4;
+a.margins=[0.085,0.15,0.05,0.15];
+//a.box='on';
+
+for i=1:length(lid.sci)
+    plot([lid.time(i),lid.time(i)],[0:1])
+    a.children(1).children.foreground=lid.sci(i)+1;
+    
+    plot([LAY.time(i),LAY.time(i)],[1:2])
+    if LAY.nbcld(i)<>0 then
+        if LAY.base(i,1)>lid.z(1) then
+            a.children(1).children.foreground=color('gray');
+        else
+            a.children(1).children.foreground=color('black');
+        end
+    else
+        a.children(1).children.foreground=1;
+    end
+    
+end
+//a.children.children.thickness=2;
+drawnow()
+a.data_bounds(3)=0;a.data_bounds(4)=2;
+f.children(1).margins=[0.40,0.45,-0.2,0.4]
+//f.children($).margins=[0.075,0.0025,0.05,0.15]
+f.children($).margins=[0.10,0.0025,0.05,0.45];
+if vers<=5.3 then
+    a.sub_ticks=[4,0];
+end
+
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//              LAYERS PLOT               
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+scf(2);clf(2);f=gcf();
+f.figure_size=[900,400];
+drawlater()
+a=gca();
+a.margins=[0.085,0.15,0.05,0.15];
+f.figure_size = [900,400];
+f.color_map=jetcolormap(64);
+xtitle('','$Time\ (UT)$','$Range\ (km)$')
+a.background=-1;
+a.x_label.font_size=4;a.y_label.font_size=4;
+plot(LAY.time,15*ones(LAY.bl),'b')
+a.children(1).children.polyline_style=6;
+a.children(1).children.mark_mode="on";
+a.children(1).children.foreground=13;
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1.;
+a.children(1).children.mark_style=4;
+
+plot(LAY.time,LAY.top(:,1:5)*1E-3,'c')
+a.children(1).children.polyline_style=6;
+a.children(1).children.foreground=color("gray");
+a.children(1).children.mark_mode="on";
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1.;
+a.children(1).children.mark_style=4;
+
+
+plot(LAY.time,LAY.peak(:,1:5)*1E-3,'w')
+a.children(1).children.polyline_style=6;
+a.children(1).children.mark_mode="on";
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1.;
+a.children(1).children.mark_style=4;
+
+
+plot(LAY.time,LAY.base(:,1:5)*1E-3,'b')
+a.children(1).children.polyline_style=6;
+a.children(1).children.mark_mode="on";
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1;
+a.children(1).children.mark_style=4;
+a.children(1).children.foreground=13;
+
+plot(LAY.time(LAY.tl>0),LAY.tl(LAY.tl>0)*1E-3,'g')
+a.children(1).children.polyline_style=6;
+a.children(1).children.foreground=color(0,238,118);
+a.children(1).children.mark_mode="on";
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1;
+a.children(1).children.mark_style=4;
+
+plot(LAY.time(LAY.bl>0),LAY.bl(LAY.bl>0)*1E-3,'r')
+a.children(1).children.polyline_style=6;
+a.children(1).children.foreground=color(238,44,44);
+a.children(1).children.foreground=53;
+a.children(1).children.mark_mode="on";
+a.children(1).children.mark_size_unit="point";
+a.children(1).children.mark_size=1;
+a.children(1).children.mark_style=4;
+
+
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+//add precipitations
+vec=LAY.base(:,1);
+if length(vec(LAY.base(:,1)==lid.z(1)))>0 then
+    plot(LAY.time(LAY.base==lid.z(1)),LAY.top(LAY.base==lid.z(1))*1E-3,'r')
+    a.children(1).children.polyline_style=6;
+    a.children(1).children.foreground=color(153,204,255);
+    a.children(1).children.mark_mode="on";
+    a.children(1).children.mark_size_unit="point";
+    a.children(1).children.mark_size=1;
+    a.children(1).children.mark_style=4;
+end
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+a.data_bounds(4)=15;
+a.data_bounds(3)=0;
+drawnow()
+f.figure_size=[900,400];
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//              EXT PROFILES AND HISTOGRAM               
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+scf(3);clf(3);f=gcf()
+drawlater()
+subplot(1,2,1)
+f.figure_size=[900,600]
+xtitle('','$\sigma_{a,ext}\ (km^{-1})$','$Range\ (km)$')
+a=gca();
+a.x_label.font_size=4;a.y_label.font_size=4;
+a.margins=[0.12,0.1,0.1,0.12];
+
+// * * * * * * * 
+ok_thr=1.0
+// * * * * * * * 
+
+iplot=find(nanmean(INV.ext,'c')>0);
+if ~isempty(iplot) then
+    plot(INV.ext(iplot,:)',lid.z(1:size(INV.ext,2))'*1E-3,'r');
+end
+vec=[1:size(INV.ext,1)];
+ind_ok=vec((INV.nb_ok((INV.nb_tot)>0)./INV.nb_tot((INV.nb_tot)>0))>=ok_thr);
+ind_notok=vec((INV.nb_ok((INV.nb_tot)>0)./INV.nb_tot((INV.nb_tot)>0))<ok_thr);
+if length(ind_ok)>0 then
+    if isnan(nanmean(INV.ext(ind_ok,:)))<>%T then
+        plot(INV.ext(ind_ok,:)',lid.z(1:params.z2/lid.vresol)'*1E-3,'b')
+    end
+end
+plot(zeros(lid.z(1:size(INV.ext,2))'*1E-3),lid.z(1:size(INV.ext,2))'*1E-3)
+a.children(1).children.foreground=color('black');
+a.children(1).children.line_style=9;
+
+if isnum(params.min_ext2) then
+    a.data_bounds(1)=evstr(params.min_ext2);
+end
+if isnum(params.max_ext2) then
+    a.data_bounds(2)=evstr(params.max_ext2);
+end
+a.data_bounds(3)=0;
+a.data_bounds(4)=params.z2*1e-3;
+if vers>=5.5 then
+    a.ticks_format=["%3.2f","%i",""]
+else
+    stop
+end
+
+
+
+subplot(2,2,2)
+if isnum(params.max_aod2) then
+    maxaod=evstr(params.max_aod2);
+else
+    maxaod=1;
+end
+xtitle('','$AOD$','$Frequency$')
+if length(ind_notok)>0 then
+    histplot([0:0.5e-2:maxaod],INV.aod(ind_notok));
+    a=gca()
+    a.children(1).children.foreground=color('red')
+end
+if length(ind_ok)>0 then
+    histplot([0:0.5e-2:maxaod],INV.aod(ind_ok));
+    a=gca()
+    a.children(1).children.foreground=color('blue')
+end
+
+if isnum(params.min_aod2) then
+    a.data_bounds(1)=evstr(params.min_aod2);
+end
+if isnum(params.max_aod2) then
+    a.data_bounds(2)=evstr(params.max_aod2);
+end
+a.box='on';
+a=gca();
+a.x_label.font_size=4;a.y_label.font_size=4;
+a.margins=[0.12,0.1,0.1,0.2];
+if vers>=5.5 then
+    a.ticks_format=["%3.2f","",""];
+else
+    stop
+end
+
+subplot(2,2,4)
+xtitle('','$S_a\ (sr)$','$Frequency$')
+if length(ind_notok)>0 then
+    histplot([0:5:140],INV.sa(ind_notok));
+    a=gca()
+    a.children(1).children.foreground=color('red')
+end
+if length(ind_ok)>0 then
+    histplot([0:5:140],INV.sa(ind_ok));
+    a=gca()
+    a.children(1).children.foreground=color('blue')
+end
+a.data_bounds(1)=0;a.data_bounds(2)=150;
+a.box='on';
+a=gca();
+a.x_label.font_size=4;a.y_label.font_size=4;
+a.margins=[0.12,0.1,0.1,0.2];
+if vers>=5.5 then
+    a.ticks_format=["%i","%3.2f",""];
+else
+    stop
+end
+
+drawnow()
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//          QL_EXT PROFILES AND AOD(t),SA(t)       ALL
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+scf(4);clf(4);f=gcf()
+f.figure_size=[900,800];
+xinfo('ALL PROFILES')
+drawlater()
+fig=4;nb_sub=2;
+
+
+//min-max
+if isnum(params.min_ext) then
+    min_ext=evstr(params.min_ext);
+else
+    min_ext=0;
+end
+
+if isnum(params.max_ext) then
+    max_ext=evstr(params.max_ext);
+else
+    //calcul du maximum pour QL
+    if length(ind_ok)>0 then
+        max_ext=round(nanmax(INV.ext(ind_ok,:))*100)/100;
+    if isnan(max_ext)==%T then
+        max_ext=round(nanmax(INV.ext(:,:))*100)/100;
+    end
+    if isnan(max_ext)==%T then
+        max_ext=0.5;
+    end
+    else
+        max_ext=round(nanmax(INV.ext(:,:))*100)/100;
+    end
+end
+
+
+subplot(2,1,1)
+f_QLb(INV.time,lid.z(1:size(INV.ext,2))*1E-3,INV.ext(1:$,:)',fig,min_ext,max_ext,nb_sub)
+f=gcf();
+f.children(1).title.text="$\sigma_{a,ext}\ (km^{-1})$";
+f.children(2).zoom_box=[f.children(2).data_bounds(1),f.children(2).data_bounds(2);f.children(2).data_bounds(3),ceil(lid.z(size(INV.ext,2))*1E-3)];
+
+subplot(2,1,2)
+a=gca();//a.margins=[0.1,0.1,0.10,0.15];
+a.margins=[0.085,0.15,0.1,0.15]
+xtitle('','$Time\ (UT)$',strcat(['AOD@',params.lambda]))
+a.x_label.font_size=4;
+a.y_label.font_size=3;
+plot(INV.time,INV.aod,'r')
+a.children.children.mark_mode="on";
+a.children.children.mark_size=3;
+a.children.children.line_style=8;
+//better for Oslo
+a.children.children.line_mode='off';
+a.children.children.mark_foreground=color('red');
+a.y_label.font_foreground=color('red');
+//a.y_label.position=[INV.time(1)+0.04*(INV.time($)-INV.time(1)),a.y_label.position(2)]
+a.font_color=color('red');
+a.axes_visible=['off','on','off'];
+//aod boundaries
+//if isnum(params.min_aod) then
+//    a.data_bounds(3)=evstr(params.min_aod);
+//end
+//if isnum(params.max_aod) then
+//    a.data_bounds(4)=evstr(params.max_aod);
+//end
+//
+if isnum(params.min_aod) then
+    if isnum(params.max_aod) then
+        a.data_bounds(4)=1E8;
+        a.data_bounds(3)=evstr(params.min_aod);
+        a.data_bounds(4)=evstr(params.max_aod);
+    else
+        a.data_bounds(3)=evstr(params.min_aod);
+    end
+end
+
+
+if vers>=5.5 then
+    a.ticks_format=["","%3.2f"]
+end
+
+newaxes()
+a=gca();a.filled="off";
+a.font_color=color('blue');
+a.margins=[0.085,0.15,0.55,0.075]
+a.y_location="right";
+xtitle('','','Sa (sr)')
+plot(INV.time,INV.sa,'b')
+
+a=gca();
+a.y_label.font_size=3;
+a.children.children.mark_mode="on";
+a.children.children.mark_size=3;
+a.children.children.line_style=8;
+//better for Oslo
+a.children.children.line_mode='off';
+a.children.children.mark_foreground=color('blue');
+a.y_label.font_foreground=color('blue');
+a.axes_visible=['off','on','off'];
+
+newaxes();
+a=gca();a.filled="off";
+a.margins=[0.085,0.15,0.55,0.075];
+plot(INV.time,%nan*ones(INV.sa));
+a.axes_visible=["on","off","on"];
+drawnow()
+f.figure_size=[900,800];
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//          QL_EXT PROFILES AND AOD(t),SA(t)       AEROSOLS
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+
+//select cases with no clouds
+nb_tot=INV.nb_tot;
+nb_tot((nb_tot)==0)=%nan;
+ratio=INV.nb_ok./nb_tot;
+ind_aer=find(ratio>=ok_thr);
+ind_cloud=find(ratio<ok_thr);
+
+//flag clouded profiles
+INV_ext=INV.ext;INV_ext(ind_cloud,:)=%nan;
+INV_sa=INV.sa;INV_sa(ind_cloud)=%nan;
+INV_aod=INV.aod;INV_aod(ind_cloud)=%nan;
+
+scf(5);clf(5);f=gcf()
+f.figure_size=[900,800];
+xinfo('AEROSOL PROFILES')
+drawlater()
+fig=5;nb_sub=2;
+subplot(2,1,1)
+f_QLb(INV.time,lid.z(1:size(INV.ext,2))*1E-3,INV_ext(:,:)',fig,min_ext,max_ext,nb_sub)
+f=gcf();
+f.children(1).title.text="$\sigma_{a,ext}\ (km^{-1})$";
+f.children(2).zoom_box=[f.children(2).data_bounds(1),f.children(2).data_bounds(2);f.children(2).data_bounds(3),ceil(lid.z(size(INV.ext,2))*1E-3)];
+
+
+
+subplot(2,1,2)
+a=gca();//a.margins=[0.1,0.1,0.10,0.15];
+a.margins=[0.085,0.15,0.1,0.15]
+xtitle('','$Time\ (UT)$',strcat(['AOD@',params.lambda]))
+a.x_label.font_size=4;
+a.y_label.font_size=3;
+
+plot(INV.time,INV_aod,'r')
+a.children.children.mark_mode="on";
+a.children.children.mark_size=3;
+a.children.children.line_style=8;
+//better for Oslo
+a.children.children.line_mode='off';
+a.children.children.mark_foreground=color('red');
+a.y_label.font_foreground=color('red');
+//a.y_label.position=[INV.time(1)+0.04*(INV.time($)-INV.time(1)),a.y_label.position(2)]
+a.font_color=color('red');
+a.axes_visible=['off','on','off'];
+//aod boundaries
+if isnum(params.min_aod) then
+    if isnum(params.max_aod) then
+        a.data_bounds(4)=1E8;
+        a.data_bounds(3)=evstr(params.min_aod);
+        a.data_bounds(4)=evstr(params.max_aod);
+    else
+        a.data_bounds(3)=evstr(params.min_aod);
+    end
+end
+//if isnum(params.max_aod) then
+//    a.data_bounds(4)=evstr(params.max_aod);
+//end
+
+
+if vers>=5.5 then
+    a.ticks_format=["","%3.2f"]
+end
+
+
+newaxes()
+a=gca();a.filled="off";
+a.font_color=color('blue');
+a.margins=[0.085,0.15,0.55,0.075]
+a.y_location="right";
+xtitle('','','Sa (sr)')
+plot(INV.time,INV_sa,'b')
+
+a=gca();
+a.y_label.font_size=3;
+a.children.children.mark_mode="on";
+a.children.children.mark_size=3;
+a.children.children.line_style=8;
+//better for Oslo
+a.children.children.line_mode='off';
+a.children.children.mark_foreground=color('blue');
+a.y_label.font_foreground=color('blue');
+a.axes_visible=['off','on','off'];
+
+newaxes();
+a=gca();a.filled="off";
+a.margins=[0.085,0.15,0.55,0.075];
+plot(INV.time,%nan*ones(INV.sa));
+a.axes_visible=["on","off","on"];
+drawnow()
+f.figure_size=[900,800];
+// * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+//              EXPORTATION               
+//* * * * * * * * * * * * * * * * * * * * * * * * *
+if inv_mod=='sa' then
+    figout=strcat([path_fig,site,'/',year,month,'/',day,'/',inv_mod,'_',string(sa_apriori),'/']);
+else
+    figout=strcat([path_fig,site,'/',year,month,'/',day,'/',inv_mod,'/'])
+end
+
+mkdir(figout)
+xs2png(1,strcat([figout,'QL_LAY-',site,'-',year,month,day,'.png']));
+//without layers
+scf(1);f=gcf();
+f.figure_size=[900,400];
+f.children(2).children(1:2).visible="off";
+xs2png(1,strcat([figout,'QL-',site,'-',year,month,day,'.png']));
+//zoom
+f.children($).data_bounds(4)=5;
+f.children($).zoom_box=[];
+xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+
+//with layers
+f.children(2).children(1:2).visible="on";
+xs2png(1,strcat([figout,'QL_LAY_ZOOM-',site,'-',year,month,day,'.png']))
+
+//without layers
+f.children(2).children(1:2).visible="off";
+xs2png(1,strcat([figout,'QL_ZOOM-',site,'-',year,month,day,'.png']))
+f.children($).data_bounds(4)=15;
+f.children($).zoom_box=[];
+
+
+xs2png(2,strcat([figout,'LAY-',site,'-',year,month,day,'.png']))
+scf(2);f=gcf();
+f.figure_size=[900,400];
+f.children($).data_bounds(4)=5;
+f.children($).zoom_box=[];
+xs2png(2,strcat([figout,'LAY_ZOOM-',site,'-',year,month,day,'.png']))
+
+scf(3);f=gcf();
+f.figure_size=[900,600];
+xs2png(3,strcat([figout,'EXTSA-',site,'-',year,month,day,'.png']))
+
+scf(4);f=gcf()
+f.figure_size=[900,800];
+xs2png(4,strcat([figout,'INVALL-',site,'-',year,month,day,'.png']))
+
+scf(5);f=gcf()
+f.figure_size=[900,800];
+xs2png(5,strcat([figout,'INVAER-',site,'-',year,month,day,'.png']))
+
+scf(6);f=gcf()
+f.figure_size=[900,400];
+xs2png(6,strcat([figout,'SI-',site,'-',year,month,day,'.png']))
+
+scf(7);f=gcf()
+f.figure_size=[900,200];
+xs2png(7,strcat([figout,'SCI-',site,'-',year,month,day,'.png']))
+
+
+mprintf('%s\n','√')
+catch
+mprintf('%s\n','X')
+exit
+end
+endfunction
+
+

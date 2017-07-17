@@ -1,0 +1,59 @@
+netcdf_open str
+str string n
+fd scalar
+
+scilab_netcdf_open str fd
+str char
+fd integer
+
+out sequence fd
+**************************************
+netcdf_close fd
+fd scalar
+close_status scalar
+
+scilab_netcdf_close fd close_status
+fd integer
+close_status integer
+
+out sequence close_status
+**************************************
+netcdf_getFloatVar fd str
+fd scalar
+str string n
+result column length 
+
+scilab_netcdf_getFloatVar fd str result length
+fd integer
+str char
+result cdoublef
+length integer
+
+out sequence result
+**************************************
+netcdf_getIntVar fd str
+fd scalar
+str string n
+result column length 
+
+scilab_netcdf_getIntVar fd str result length
+fd integer
+str char
+result cintf
+length integer
+
+out sequence result
+**************************************
+netcdf_getCharVar fd str
+fd scalar
+str string n
+result column length 
+
+scilab_netcdf_getCharVar fd str result length
+fd integer
+str char
+result ccharf
+length integer
+
+out sequence result
+**************************************

@@ -1,0 +1,7 @@
+/home/augustinm/Desktop/BASIC/parameters/
+/home/augustinm/Desktop/BASIC/library/
+/disk1/augustinm/Data/Lidar/
+/disk1/augustinm/Data/Sunphotometer/Aeronet/
+/disk1/augustinm/BASIC_out/out/
+/disk1/augustinm/BASIC_out/fig/
+
